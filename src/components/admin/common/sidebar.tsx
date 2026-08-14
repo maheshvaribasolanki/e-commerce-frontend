@@ -19,6 +19,7 @@ const items: AdminNavItem[] = [
   { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
   { label: "Products", href: "/admin/products", icon: Package },
   { label: "Coupons", href: "/admin/coupons", icon: BadgePercent },
+  { label: "Users", href: "/admin/users", icon: BarChart3 },
   { label: "Orders", href: "/admin/orders", icon: BarChart3 },
   { label: "Settings", href: "/admin/settings", icon: Settings2 },
 ];
@@ -67,10 +68,10 @@ export function AdminSidebar() {
   return (
     <aside className={sidebarRoot}>
       <div className={brandRow}>
-        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3">
           <Store className="w-10 h-10" />
           <span className="text-[25px] font-semibold text-foreground">
-            E-Shopify
+            StoreHub
           </span>
         </div>
       </div>

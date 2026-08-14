@@ -34,7 +34,7 @@ export function AdminLayout() {
                   <SheetHeader className="border-b border-border px-5 py-4 text-left">
                     <SheetTitle className="flex items-center gap-3">
                       <Store className="h-7 w-7 text-primary" />
-                      <span className="text-xl font-semibold">E-Shopify</span>
+                      <span className="text-xl font-semibold">StoreHub</span>
                     </SheetTitle>
                   </SheetHeader>
                   <div className="p-4">

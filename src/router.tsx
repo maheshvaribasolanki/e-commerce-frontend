@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import { CustomerLayout } from "./components/layout/CustomerLayout";
 import { StoreHome } from "./pages/customer/Home";
 import { PublicOnlyLayout } from "./components/auth/PublicOnlyLayout";
+import AuthPage from "./pages/auth/Auth";
 import { SignInPage } from "./pages/auth/Sign-in";
 import { SignUpPage } from "./pages/auth/Sign-up";
 import { ProtectedLayout } from "./components/auth/ProtectedLayout";
@@ -12,6 +13,7 @@ import AdminProducts from "./pages/admin/Products";
 import AdminCoupons from "./pages/admin/Promos";
 import AdminOrders from "./pages/admin/Orders";
 import AdminSettings from "./pages/admin/Settings";
+import AdminUsers from "./pages/admin/Users";
 import Collections from "./pages/customer/Collections";
 import CollectionDetails from "./pages/customer/Collection-Details";
 import CustomerOrderSuccessPage from "./pages/customer/Order-Sucess";
@@ -36,6 +38,10 @@ export const router = createBrowserRouter([
       {
         element: <PublicOnlyLayout />,
         children: [
+          {
+            path: "auth/*",
+            element: <AuthPage />,
+          },
           {
             path: "sign-in/*",
             element: <SignInPage />,
@@ -87,6 +93,10 @@ export const router = createBrowserRouter([
               {
                 path: "settings",
                 element: <AdminSettings />,
+              },
+              {
+                path: "users",
+                element: <AdminUsers />,
               },
             ],
           },

@@ -77,7 +77,7 @@ export function CustomerFooter() {
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-md">
                 <Store className="h-6 w-6" />
               </div>
-              <span className="text-2xl font-bold tracking-tight text-foreground">E-Shopify</span>
+              <span className="text-2xl font-bold tracking-tight text-foreground">StoreHub</span>
             </Link>
             <p className="text-sm text-muted-foreground max-w-sm leading-relaxed">
               Discover curated luxury lifestyle, high-tech gadgets, and modern apparel. Elevate your everyday wardrobe with top quality items.
@@ -159,7 +159,7 @@ export function CustomerFooter() {
             <h4 className="text-sm font-bold uppercase tracking-wider text-foreground">Company</h4>
             <ul className="space-y-2.5 text-sm text-muted-foreground">
               <li>
-                <span className="hover:text-primary transition-colors cursor-pointer">About E-Shopify</span>
+                <span className="hover:text-primary transition-colors cursor-pointer">About StoreHub</span>
               </li>
               <li>
                 <span className="hover:text-primary transition-colors cursor-pointer">Sustainability</span>
@@ -177,7 +177,7 @@ export function CustomerFooter() {
         {/* Bottom copyright and social */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
           <p className="flex items-center gap-1">
-            © {new Date().getFullYear()} E-Shopify, Inc. Crafted with  for shoppers everywhere.
+            © {new Date().getFullYear()} StoreHub, Inc. Crafted with  for shoppers everywhere.
           </p>
 
           <div className="flex items-center gap-6">

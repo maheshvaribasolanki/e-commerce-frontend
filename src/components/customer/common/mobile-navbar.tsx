@@ -94,7 +94,7 @@ export function CustomerMobileNavbar({ isSignedIn }: CustomerMobileNavbarProps) 
               <Link to="/" onClick={() => setOpen(false)} className="flex items-center gap-3">
                 <Store className="h-10 w-10 text-foreground" />
                 <div className="flex flex-col">
-                  <span className="text-[25px] font-semibold tracking-[-0.02em] text-foreground">E-Shopify</span>
+                  <span className="text-[25px] font-semibold tracking-[-0.02em] text-foreground">StoreHub</span>
                   <span className="text-[10px] font-semibold text-primary uppercase">Mobile Navigation</span>
                 </div>
               </Link>
