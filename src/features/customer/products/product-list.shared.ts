@@ -40,7 +40,7 @@ const COLOR_MAP: Record<string, string> = {
 export type FacetKey = "category" | "brand" | "color" | "size" | "search";
 
 export type CustomerProductFilters = {
-  category: string;
+  category: string[];
   brand: string;
   color: string;
   size: string;

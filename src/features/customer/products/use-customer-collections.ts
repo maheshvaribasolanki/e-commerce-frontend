@@ -24,21 +24,27 @@ export function useCustomerProductList() {
 
   const searchKeyword = searchParams.get("search") || "";
 
+  const categoryParam = searchParams.get("category") || "";
+  const categoryFilters = useMemo<string[]>(
+    () => categoryParam.split(",").map((s) => s.trim()).filter(Boolean),
+    [categoryParam],
+  );
+
   const filters = useMemo<CustomerProductFilters>(
     () => ({
-      category: searchParams.get("category") || "",
+      category: categoryFilters,
       brand: searchParams.get("brand") || "",
       color: searchParams.get("color") || "",
       size: searchParams.get("size") || "",
     }),
-    [searchParams],
+    [categoryFilters, searchParams],
   );
 
   const sort = (searchParams.get("sort") as ProductSort) || "recent";
 
   const query = useMemo<GetCustomerProductsParams>(
     () => ({
-      category: filters.category || undefined,
+      category: filters.category.length ? filters.category.join(",") : undefined,
       brand: filters.brand || undefined,
       color: filters.color || undefined,
       sort,
@@ -59,7 +65,7 @@ export function useCustomerProductList() {
   }, [products, searchKeyword]);
 
   const hasActiveFilters = Boolean(
-    filters.category || filters.brand || filters.color || filters.size || searchKeyword,
+    filters.category.length || filters.brand || filters.color || filters.size || searchKeyword,
   );
 
   async function loadCategories() {
@@ -82,19 +88,73 @@ export function useCustomerProductList() {
     }
   }
 
-  //   update params -> when user will select or deselect filters/sort
-
   function updateParams(next: URLSearchParams) {
     setSearchParams(next);
   }
 
-  // toggle filter facets
+  const toggleCategory = useCallback(
+    (value: string) => {
+      const nextValue = new URLSearchParams(searchParams);
+      const currentArr = (searchParams.get("category") || "")
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean);
+
+      const exists = currentArr.includes(value);
+      const nextArr = exists
+        ? currentArr.filter((item) => item !== value)
+        : [...currentArr, value];
+
+      if (nextArr.length === 0) {
+        nextValue.delete("category");
+      } else {
+        nextValue.set("category", nextArr.join(","));
+      }
+
+      updateParams(nextValue);
+    },
+    [searchParams],
+  );
+
+  const toggleCategoryGroup = useCallback(
+    (values: string[]) => {
+      const nextValue = new URLSearchParams(searchParams);
+      const currentArr = (searchParams.get("category") || "")
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean);
+
+      const allSelected = values.every((val) => currentArr.includes(val));
+      let nextArr: string[];
+
+      if (allSelected) {
+        nextArr = currentArr.filter((val) => !values.includes(val));
+      } else {
+        const set = new Set([...currentArr, ...values]);
+        nextArr = Array.from(set);
+      }
+
+      if (nextArr.length === 0) {
+        nextValue.delete("category");
+      } else {
+        nextValue.set("category", nextArr.join(","));
+      }
+
+      updateParams(nextValue);
+    },
+    [searchParams],
+  );
 
   const toggleFacet = (key: FacetKey, value: string) => {
-    const nextValue = new URLSearchParams(searchParams);
-    const currentvalue = searchParams.get(key) || "";
+    if (key === "category") {
+      toggleCategory(value);
+      return;
+    }
 
-    if (currentvalue === value) {
+    const nextValue = new URLSearchParams(searchParams);
+    const currentValue = searchParams.get(key) || "";
+
+    if (currentValue === value) {
       nextValue.delete(key);
     } else {
       nextValue.set(key, value);
@@ -102,8 +162,6 @@ export function useCustomerProductList() {
 
     updateParams(nextValue);
   };
-
-  // handle sort
 
   const changeSort = useCallback(
     (value: ProductSort) => {
@@ -117,10 +175,8 @@ export function useCustomerProductList() {
 
       updateParams(nextValue);
     },
-    [searchParams, updateParams],
+    [searchParams],
   );
-
-  //clear all filters
 
   const clearFilters = () => {
     const nextValue = new URLSearchParams(searchParams);
@@ -132,11 +188,8 @@ export function useCustomerProductList() {
     updateParams(nextValue);
   };
 
-  // available colors
-
   async function loadAvailableColors() {
     try {
-      setLoading(true);
       const data = await getCustomerProducts();
       const uniqueColors = new Set<string>();
 
@@ -147,12 +200,11 @@ export function useCustomerProductList() {
       setAvailableColors(
         Array.from(uniqueColors).sort((a, b) => a.localeCompare(b)),
       );
-    } finally {
-      setLoading(false);
+    } catch {
+      setAvailableColors([]);
     }
   }
 
-  // active filter badges
   const activeFilterBadges = useMemo<ActiveFilterBadge[]>(() => {
     const items: ActiveFilterBadge[] = [];
 
@@ -164,15 +216,16 @@ export function useCustomerProductList() {
       });
     }
 
-    if (filters.category) {
-      const found = categories.find((item) => item._id === filters.category);
-
+    filters.category.forEach((catVal) => {
+      const found = categories.find(
+        (item) => item._id === catVal || item.name.toLowerCase() === catVal.toLowerCase(),
+      );
       items.push({
         key: "category",
         label: "Category",
-        value: found?.name || filters.category,
+        value: found?.name || catVal,
       });
-    }
+    });
 
     if (filters.brand) {
       items.push({
@@ -222,6 +275,8 @@ export function useCustomerProductList() {
     hasActiveFilters,
     changeSort,
     availableColors,
+    toggleCategory,
+    toggleCategoryGroup,
     toggleFacet,
     clearFilters,
     activeFilterBadges,

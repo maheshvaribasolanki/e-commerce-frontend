@@ -93,6 +93,7 @@ function Collections() {
     availableColors,
     filters,
     toggleFacet,
+    toggleCategoryGroup,
     clearFilters,
     activeFilterBadges,
   } = useCustomerProductList();
@@ -133,8 +134,8 @@ function Collections() {
       <div className={contentContainerClass}>
         <div className={topBarClass}>
           <div className={activeBadgesWrapClass}>
-            {activeFilterBadges.map((item) => (
-              <Badge key={item.key} className={activeBadgeClass}>
+            {activeFilterBadges.map((item, index) => (
+              <Badge key={`${item.key}-${item.value}-${index}`} className={activeBadgeClass}>
                 {item.label}: {item.value}
               </Badge>
             ))}
@@ -146,7 +147,7 @@ function Collections() {
               <SheetTrigger asChild>
                 <Button className={mobileFilterButtonClass}>
                   <SlidersHorizontal className={mobileFilterIconClass} />
-                  Filers
+                  Filters
                 </Button>
               </SheetTrigger>
 
@@ -162,6 +163,7 @@ function Collections() {
                   hasActiveFilters={hasActiveFilters}
                   onClearFilters={clearFilters}
                   onToggleFacet={toggleFacet}
+                  onToggleCategoryGroup={toggleCategoryGroup}
                 />
               </SheetContent>
             </Sheet>
@@ -178,6 +180,7 @@ function Collections() {
                 hasActiveFilters={hasActiveFilters}
                 onClearFilters={clearFilters}
                 onToggleFacet={toggleFacet}
+                onToggleCategoryGroup={toggleCategoryGroup}
               />
             </Card>
           </aside>
